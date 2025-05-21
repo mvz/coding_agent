@@ -17,8 +17,13 @@ class Agent
       user_input = gets.chomp
       break if user_input == "exit"
 
-      response = @chat.ask user_input
-      puts response.content
+      begin
+        response = @chat.ask user_input
+        puts response.content
+      rescue RubyLLM::BadRequestError => e
+        puts e.message
+        exit
+      end
     end
   end
 end
