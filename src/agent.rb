@@ -1,13 +1,21 @@
-require "ruby_llm"
+require "langchain"
 require_relative "tools/read_file"
 require_relative "tools/list_files"
 require_relative "tools/edit_file"
 require_relative "tools/run_shell_command"
 
 class Agent
-  def initialize
-    @chat = RubyLLM.chat
-    @chat.with_tools(Tools::ReadFile, Tools::ListFiles, Tools::EditFile, Tools::RunShellCommand)
+  def initialize(llm)
+    @assistant = Langchain::Assistant.new(
+      llm: llm,
+      instructions: "You are a helpful coding assistant with file system access.",
+      tools: [
+        Tools::ReadFile.new,
+        Tools::ListFiles.new,
+        Tools::EditFile.new,
+        Tools::RunShellCommand.new
+      ]
+    )
   end
 
   def run
@@ -15,13 +23,13 @@ class Agent
     loop do
       print "> "
       user_input = gets.chomp
-      break if user_input == "exit"
+      break if user_input.strip.downcase == "exit"
 
       begin
-        response = @chat.ask user_input
-        puts response.content
-      rescue RubyLLM::BadRequestError => e
-        puts e.message
+        @assistant.add_message_and_run(content: user_input)
+        puts @assistant.messages.last.content
+      rescue StandardError => e
+        puts "Error: #{e.message}"
         exit
       end
     end

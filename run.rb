@@ -6,12 +6,9 @@ Dir.chdir(__dir__) do
   require "dotenv/load"
 end
 
-require "ruby_llm"
 require_relative "src/agent"
 
-RubyLLM.configure do |config|
-  config.anthropic_api_key = ENV.fetch("ANTHROPIC_API_KEY", nil)
-  config.default_model = "claude-3-7-sonnet"
-end
+llm = Langchain::LLM::Anthropic.new(api_key: ENV.fetch("ANTHROPIC_API_KEY"),
+                                    default_options: { chat_model: "claude-3-7-sonnet-latest" })
 
-Agent.new.run
+Agent.new(llm).run

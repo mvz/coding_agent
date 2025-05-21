@@ -1,7 +1,11 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    base64 (0.2.0)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
+    baran (0.1.12)
+    bigdecimal (3.1.9)
+    csv (3.3.4)
     date (3.4.1)
     debug (1.10.0)
       irb (~> 1.10)
@@ -16,37 +20,44 @@ GEM
       multipart-post (~> 2.0)
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
-    faraday-retry (2.3.1)
-      faraday (~> 2.0)
     io-console (0.8.0)
     irb (1.15.2)
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.12.0)
+    json-schema (5.1.1)
+      addressable (~> 2.8)
+      bigdecimal (~> 3.1)
+    langchainrb (0.19.5)
+      baran (~> 0.1.9)
+      csv
+      json-schema (>= 4, < 6)
+      matrix
+      pragmatic_segmenter (~> 0.3.0)
+      zeitwerk (~> 2.5)
     logger (1.7.0)
+    matrix (0.4.2)
     minitest (5.25.5)
     multipart-post (2.4.1)
     net-http (0.6.0)
       uri
     pp (0.6.2)
       prettyprint
+    pragmatic_segmenter (0.3.24)
     prettyprint (0.2.0)
     psych (5.2.6)
       date
       stringio
+    public_suffix (6.0.2)
     rdoc (6.13.1)
       psych (>= 4.0.0)
     reline (0.6.1)
       io-console (~> 0.5)
-    ruby_llm (1.2.0)
-      base64
-      event_stream_parser (~> 1)
-      faraday (~> 2)
-      faraday-multipart (~> 1)
-      faraday-net_http (~> 3)
-      faraday-retry (~> 2)
-      zeitwerk (~> 2)
+    ruby-anthropic (0.4.2)
+      event_stream_parser (>= 0.3.0, < 2.0.0)
+      faraday (>= 1)
+      faraday-multipart (>= 1)
     stringio (3.1.7)
     uri (1.0.3)
     zeitwerk (2.7.2)
@@ -58,8 +69,9 @@ PLATFORMS
 DEPENDENCIES
   debug
   dotenv
+  langchainrb
   minitest
-  ruby_llm
+  ruby-anthropic
 
 BUNDLED WITH
-   2.6.3
+   2.6.9

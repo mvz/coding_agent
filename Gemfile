@@ -1,7 +1,8 @@
 source "https://rubygems.org"
 
-gem "ruby_llm"
+gem "langchainrb"
 gem "dotenv"
+gem "ruby-anthropic"
 
 group :development, :test do
   gem "debug"
