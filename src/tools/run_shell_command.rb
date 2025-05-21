@@ -1,4 +1,5 @@
 require "ruby_llm/tool"
+require "open3"
 
 module Tools
   class RunShellCommand < RubyLLM::Tool
@@ -11,9 +12,12 @@ module Tools
       response = gets.chomp
       return { error: "User declined to execute the command" } unless response == "y"
 
-      `#{command}`
-    rescue => e
-      { error: e.message }
+      begin
+        stdout_and_stderr, _status = Open3.capture2e(command)
+        stdout_and_stderr
+      rescue StandardError => e
+        { error: e.message }
+      end
     end
   end
 end
