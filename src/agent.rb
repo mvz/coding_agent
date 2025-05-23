@@ -11,12 +11,9 @@ class Agent
     @assistant = Langchain::Assistant.new(
       llm: llm,
       instructions: "You are a helpful coding assistant with file system access.",
-      tools: [
-        Tools::ReadFile.new,
-        Tools::ListFiles.new,
-        Tools::EditFile.new,
-        Tools::RunShellCommand.new
-      ]
+      tools: standard_tools,
+      add_message_callback: method(:add_message_callback).to_proc,
+      tool_execution_callback: method(:tool_execution_callback).to_proc
     )
   end
 
@@ -33,6 +30,30 @@ class Agent
   end
 
   private
+
+  def add_message_callback(message)
+    case message.standard_role
+    when :user, :tool
+      # skip
+    when :llm
+      puts message.content if message.tool_calls.any?
+    else
+      raise NotImplementedError
+    end
+  end
+
+  def tool_execution_callback(_tool_call_id, tool_name, method_name, tool_arguments)
+    puts "** executing #{tool_name}##{method_name} with #{tool_arguments.inspect}"
+  end
+
+  def standard_tools
+    [
+      Tools::ReadFile.new,
+      Tools::ListFiles.new,
+      Tools::EditFile.new,
+      Tools::RunShellCommand.new
+    ]
+  end
 
   def instruct_user
     puts "Chat with the agent. Type 'exit' to ... well, exit"
