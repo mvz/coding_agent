@@ -9,6 +9,7 @@ end
 
 require_relative "src/agent"
 
+Langchain.logger.level = :info
 llm = Langchain::LLM::Anthropic.new(api_key: ENV.fetch("ANTHROPIC_API_KEY"),
                                     default_options: { chat_model: "claude-3-7-sonnet-latest" })
 
