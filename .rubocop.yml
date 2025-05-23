@@ -1,0 +1,24 @@
+inherit_mode:
+  merge:
+    - Exclude
+    - CountAsOne
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.3
+
+# Make BeginEndAlignment behavior match EndAlignment
+Layout/BeginEndAlignment:
+  EnforcedStyleAlignWith: begin
+
+# Be lenient with line length
+Layout/LineLength:
+  Max: 120
+
+# No documentation for now
+Style/Documentation:
+  Enabled: false
+
+# Do not commit to use of interpolation
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
