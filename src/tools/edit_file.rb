@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "langchain"
 
 module Tools
@@ -14,7 +16,8 @@ module Tools
 
     define_function :execute, description: description do
       property :path, type: "string", description: "The path to the file", required: true
-      property :old_str, type: "string", description: "Text to search for - must match exactly and must only have one match exactly", required: true
+      property :old_str, type: "string",
+                         description: "Text to search for - must match exactly and must only have one match exactly", required: true
       property :new_str, type: "string", description: "Text to replace old_str with", required: true
     end
 
@@ -23,19 +26,15 @@ module Tools
 
       content = File.exist?(path) ? File.read(path) : ""
 
-      unless content.include?(old_str)
-        raise "The string to replace (old_str) was not found in the file content"
-      end
+      raise "The string to replace (old_str) was not found in the file content" unless content.include?(old_str)
 
-      if content.scan(old_str).size > 1
-        raise "old_str matched more than once – only one exact match is allowed"
-      end
+      raise "old_str matched more than once – only one exact match is allowed" if content.scan(old_str).size > 1
 
       new_content = content.sub(old_str, new_str)
       File.write(path, new_content)
 
       { success: true, message: "Successfully updated file: #{path}" }
-    rescue => e
+    rescue StandardError => e
       { error: e.message }
     end
   end
