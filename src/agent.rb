@@ -47,7 +47,7 @@ class Agent
   end
 
   def evaluate_input(user_input)
-    @assistant.add_message_and_run(content: user_input)
+    @assistant.add_message_and_run!(content: user_input)
   end
 
   def print_result
