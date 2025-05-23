@@ -21,19 +21,36 @@ class Agent
   end
 
   def run
-    puts "Chat with the agent. Type 'exit' to ... well, exit"
+    instruct_user
     loop do
-      print "> "
-      user_input = gets.chomp
-      break if user_input.strip.downcase == "exit"
-
-      begin
-        @assistant.add_message_and_run(content: user_input)
-        puts @assistant.messages.last.content
-      rescue StandardError => e
-        puts "Error: #{e.message}"
-        exit
-      end
+      user_input = read_user_input or break
+      evaluate_input(user_input)
+      print_result
     end
+  rescue StandardError => e
+    puts "Error: #{e.message}"
+    exit
+  end
+
+  private
+
+  def instruct_user
+    puts "Chat with the agent. Type 'exit' to ... well, exit"
+  end
+
+  def read_user_input
+    print "> "
+    user_input = gets.chomp
+    return false if user_input.strip.downcase == "exit"
+
+    user_input
+  end
+
+  def evaluate_input(user_input)
+    @assistant.add_message_and_run(content: user_input)
+  end
+
+  def print_result
+    puts @assistant.messages.last.content
   end
 end

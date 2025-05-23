@@ -7,9 +7,12 @@ module Tools
     extend Langchain::ToolDefinition
 
     define_function :execute,
-                    description: "List files and directories at a given path. If no path is provided, lists files in the current directory." do
+                    description: "List files and directories at a given path. If no path is provided, " \
+                                 "lists files in the current directory." do
       property :path, type: "string",
-                      description: "Optional relative path to list files from. Defaults to current directory if not provided.", required: false
+                      description: "Optional relative path to list files from. " \
+                                   "Defaults to current directory if not provided.",
+                      required: false
     end
 
     def execute(path: "")

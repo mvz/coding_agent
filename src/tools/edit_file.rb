@@ -17,7 +17,8 @@ module Tools
     define_function :execute, description: description do
       property :path, type: "string", description: "The path to the file", required: true
       property :old_str, type: "string",
-                         description: "Text to search for - must match exactly and must only have one match exactly", required: true
+                         description: "Text to search for - must match exactly and must only have one match exactly",
+                         required: true
       property :new_str, type: "string", description: "Text to replace old_str with", required: true
     end
 
