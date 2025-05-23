@@ -40,7 +40,7 @@ class Agent
 
   def read_user_input
     print "> "
-    user_input = gets.chomp
+    user_input = gets&.chomp or return false
     return false if user_input.strip.downcase == "exit"
 
     user_input
