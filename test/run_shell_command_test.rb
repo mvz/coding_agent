@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "minitest/autorun"
-require_relative "../src/tools/run_shell_command"
+require_relative "../lib/tools/run_shell_command"
 require "stringio"
 
 class TestRunShellCommand < Minitest::Test

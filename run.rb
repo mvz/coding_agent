@@ -7,7 +7,7 @@ Dir.chdir(__dir__) do
   require "dotenv/load"
 end
 
-require_relative "src/agent"
+require_relative "lib/agent"
 
 RubyLLM.configure do |config|
   config.anthropic_api_key = ENV.fetch("ANTHROPIC_API_KEY", nil)

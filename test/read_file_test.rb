@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "minitest/autorun"
-require_relative "../src/tools/read_file"
+require_relative "../lib/tools/read_file"
 
 class TestReadFile < Minitest::Test
   def setup
