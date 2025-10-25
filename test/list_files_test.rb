@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "minitest/autorun"
-require_relative "../src/tools/list_files"
+require_relative "../lib/tools/list_files"
 
 class TestListFiles < Minitest::Test
   def setup
