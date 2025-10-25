@@ -20,7 +20,4 @@ After that, call `ruby /path/to/run.rb` from the directory you want to operate o
 
 # Running tests
 
-Execute `test/run_all.sh` from the root of the project.
-
-
-
+Execute `bundle exec rake` from the root of the project.

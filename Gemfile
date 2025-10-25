@@ -8,5 +8,6 @@ gem "ruby_llm"
 group :development, :test do
   gem "debug"
   gem "minitest"
+  gem "rake"
   gem "rubocop"
 end
