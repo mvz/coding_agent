@@ -1,20 +1,18 @@
 # frozen_string_literal: true
 
-require "langchain"
+require "ruby_llm"
 require_relative "tools/read_file"
 require_relative "tools/list_files"
 require_relative "tools/edit_file"
 require_relative "tools/run_shell_command"
 
 class Agent
-  def initialize(llm)
-    @assistant = Langchain::Assistant.new(
-      llm: llm,
-      instructions: "You are a helpful coding assistant with file system access.",
-      tools: standard_tools,
-      add_message_callback: method(:add_message_callback).to_proc,
-      tool_execution_callback: method(:tool_execution_callback).to_proc
-    )
+  def initialize
+    @chat = RubyLLM.chat
+    @chat.with_instructions "You are a helpful coding assistant with file system access."
+    @chat.on_tool_call(&method(:tool_execution_callback))
+    @chat.on_end_message(&method(:add_message_callback))
+    @chat.with_tools(*standard_tools)
   end
 
   def run
@@ -24,34 +22,34 @@ class Agent
       evaluate_input(user_input)
       print_result
     end
-  rescue StandardError => e
-    puts "Error: #{e.message}"
+  rescue RubyLLM::BadRequestError => e
+    puts e.message
     exit
   end
 
   private
 
   def add_message_callback(message)
-    case message.standard_role
+    case message.role
     when :user, :tool
       # skip
-    when :llm
-      puts message.content if message.tool_calls.any?
+    when :assistant
+      puts message.content if message.tool_calls&.any?
     else
       raise NotImplementedError
     end
   end
 
-  def tool_execution_callback(_tool_call_id, tool_name, method_name, tool_arguments)
-    puts "** executing #{tool_name}##{method_name} with #{tool_arguments.inspect}"
+  def tool_execution_callback(tool_call)
+    puts "** executing #{tool_call.name} with #{tool_call.arguments.inspect}"
   end
 
   def standard_tools
     [
-      Tools::ReadFile.new,
-      Tools::ListFiles.new,
-      Tools::EditFile.new,
-      Tools::RunShellCommand.new
+      Tools::ReadFile,
+      Tools::ListFiles,
+      Tools::EditFile,
+      Tools::RunShellCommand
     ]
   end
 
@@ -68,10 +66,10 @@ class Agent
   end
 
   def evaluate_input(user_input)
-    @assistant.add_message_and_run!(content: user_input)
+    @response = @chat.ask user_input
   end
 
   def print_result
-    puts @assistant.messages.last.content
+    puts @response.content
   end
 end

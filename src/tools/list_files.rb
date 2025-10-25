@@ -1,24 +1,16 @@
 # frozen_string_literal: true
 
-require "langchain"
+require "ruby_llm/tool"
 
 module Tools
-  class ListFiles
-    extend Langchain::ToolDefinition
-
-    define_function :execute,
-                    description: "List files and directories at a given path. If no path is provided, " \
-                                 "lists files in the current directory." do
-      property :path, type: "string",
-                      description: "Optional relative path to list files from. " \
-                                   "Defaults to current directory if not provided.",
-                      required: false
-    end
+  class ListFiles < RubyLLM::Tool
+    description "List files and directories at a given path. If no path is provided, " \
+                "lists files in the current directory."
+    param :path, desc: "Optional relative path to list files from. Defaults to current directory if not provided."
 
     def execute(path: "")
-      Dir.glob(File.join(path, "*")).map do |filename|
-        File.directory?(filename) ? "#{filename}/" : filename
-      end
+      Dir.glob(File.join(path, "*"))
+         .map { |filename| File.directory?(filename) ? "#{filename}/" : filename }
     rescue StandardError => e
       { error: e.message }
     end

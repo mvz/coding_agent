@@ -3,8 +3,7 @@
 source "https://rubygems.org"
 
 gem "dotenv"
-gem "langchainrb"
-gem "ruby-anthropic"
+gem "ruby_llm"
 
 group :development, :test do
   gem "debug"
